@@ -108,6 +108,51 @@ class edit_details_form extends moodleform {
         $mform->disabledIf('expireperiod[number]', 'expiry', 'neq', 2);
         $mform->disabledIf('expireperiod[timeunit]', 'expiry', 'neq', 2);
 
+//-------------------------MICHAELS FEATURE---------------------------------
+
+	//	$classlist = array();
+	//	if ($courses = enrol_get_my_courses(NULL, 'visible DESC, fullname ASC')) {
+	//	foreach ($courses as $course) {
+	//		$classlist[] = $course->shortname;
+	//		echo "HIIIIIIIII";
+	//	}
+		echo "fucccck";
+
+		//associate with a class
+        $mform->addElement('header', 'classassoc', 'Badge for class');
+
+        $mform->addElement('select', 'classid', 'Class ID',   
+      											  array( '0' => '100',
+                                                         '1' => '101',
+                                                         '2' => '102',
+                                                         '3' => '201',
+                                                         '4' => '202',
+                                                         '5' => '500'));
+        $mform->setType('classid', PARAM_NOTAGS);
+        $mform->addRule('classid', null, 'required');
+		
+		//setup levels
+		$mform->addElement('header', 'level', 'Levels for badge');
+
+        $mform->addElement('select', 'levelcount', 'Number of levels',                                                   
+        											  array( '0' => '0',
+	                                                         '1' => '1',
+	                                                         '2' => '2',
+	                                                         '3' => '3',
+	                                                         '4' => '4',
+	                                                         '5' => '5'));
+        $mform->setType('levelcount', PARAM_NOTAGS);
+        $mform->addRule('levelcount', null, 'required');
+		$mform->addElement('select', 'xpperlvl', 'XP per level',                                                   
+												  array( '0' => '50',
+                                                         '1' => '100',
+                                                         '2' => '200',
+                                                         '3' => '300',
+                                                         '4' => '400',
+                                                         '5' => '500'));
+
+//-------------------------MICHAELS FEATURE---------------------------------
+
         // Set issuer URL.
         // Have to parse URL because badge issuer origin cannot be a subfolder in wwwroot.
         $url = parse_url($CFG->wwwroot);
