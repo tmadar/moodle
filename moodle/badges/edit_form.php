@@ -116,7 +116,6 @@ class edit_details_form extends moodleform {
 	//		$classlist[] = $course->shortname;
 	//		echo "HIIIIIIIII";
 	//	}
-		echo "fucccck";
 
 		//associate with a class
         $mform->addElement('header', 'classassoc', 'Badge for class');

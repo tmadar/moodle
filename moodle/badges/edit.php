@@ -90,26 +90,27 @@ if ($form->is_cancelled()) {
     redirect(new moodle_url('/badges/overview.php', array('id' => $badgeid)));
 } else if ($form->is_submitted() && $form->is_validated() && ($data = $form->get_data())) {
     if ($action == 'details') {
-        $badge->name = $data->name;
-        $badge->description = $data->description;
-        $badge->usermodified = $USER->id;
-        $badge->issuername = $data->issuername;
-        $badge->issuerurl = $data->issuerurl;
-        $badge->issuercontact = $data->issuercontact;
-        $badge->expiredate = ($data->expiry == 1) ? $data->expiredate : null;
-        $badge->expireperiod = ($data->expiry == 2) ? $data->expireperiod : null;
-
-        // Need to unset message_editor options to avoid errors on form edit.
-        unset($badge->messageformat);
-        unset($badge->message_editor);
-
-        if ($badge->save()) {
-            badges_process_badge_image($badge, $form->save_temp_file('image'));
-            $form->set_data($badge);
-            $statusmsg = get_string('changessaved');
-        } else {
-            $errormsg = get_string('error:save', 'badges');
-        }
+    	for ($i = 1; $i <= 5; $i++) {
+    		$badge->name = $data->name;
+	        $badge->description = $data->description;
+	        $badge->usermodified = $USER->id;
+	        $badge->issuername = $data->issuername;
+	        $badge->issuerurl = $data->issuerurl;
+	        $badge->issuercontact = $data->issuercontact;
+	        $badge->expiredate = ($data->expiry == 1) ? $data->expiredate : null;
+	        $badge->expireperiod = ($data->expiry == 2) ? $data->expireperiod : null;
+	
+	        // Need to unset message_editor options to avoid errors on form edit.
+	        unset($badge->messageformat);
+	        unset($badge->message_editor);
+	
+	        if ($badge->save()) {
+	            badges_process_badge_image($badge, $form->save_temp_file('image'));
+	            $form->set_data($badge);
+	            $statusmsg = get_string('changessaved');
+	        } else {
+	            $errormsg = get_string('error:save', 'badges');
+	        }}
     } else if ($action == 'message') {
         // Calculate next message cron if form data is different from original badge data.
         if ($data->notification != $badge->notification) {
