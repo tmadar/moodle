@@ -149,6 +149,7 @@
         <INDEX NAME="coursecriteriatype" UNIQUE="true" FIELDS="course, criteriatype"/>
       </INDEXES>
     </TABLE>
+    <!-- Changed by MICHAEL! -->
     <TABLE NAME="metrix" COMMENT="This should be the table for specific class metrics.">
     	<FIELDS>
     		<FIELD NAME="metrixid" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" COMMENT=""/>

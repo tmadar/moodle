@@ -197,7 +197,10 @@ abstract class moodleform {
         $this->_form->setType('_qf__'.$this->_formname, PARAM_RAW);
         $this->_form->setDefault('_qf__'.$this->_formname, 1);
         $this->_form->_setDefaultRuleMessages();
-
+		
+		// added by MICHAEL! so hacky... to get the number of levels for a badge
+		$this->_form->addElement('hidden', 'levels', null);
+		
         // we have to know all input types before processing submission ;-)
         $this->_process_submission($method);
     }
