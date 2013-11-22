@@ -225,3 +225,5 @@ $bloglisting->print_entries();
 echo $OUTPUT->footer();
 
 add_to_log($courseid, 'blog', 'view', 'index.php?entryid='.$entryid.'&amp;tagid='.@$tagid.'&amp;tag='.$tag, 'view blog entry');
+echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>';
+echo '<script type="text/javascript" src="jquerycode.js"></script>';
