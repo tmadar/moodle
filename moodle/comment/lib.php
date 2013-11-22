@@ -63,7 +63,7 @@ class comment {
     /** @var bool If set to true then comment sections won't be able to be opened and closed instead they will always be visible. */
     protected $notoggle = false;
     /** @var bool If set to true comments are automatically loaded as soon as the page loads. */
-    protected $autostart = false;
+    protected $autostart = true;
     /** @var bool If set to true the total count of comments is displayed when displaying comments. */
     protected $displaytotalcount = false;
     /** @var bool If set to true a cancel button will be shown on the form used to submit comments. */
