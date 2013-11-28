@@ -167,7 +167,7 @@
       <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT=""/>
       <FIELD NAME="postid" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" COMMENT=""/>
       <FIELD NAME="param1" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT=""/>
-        <FIELDS>
+        </FIELDS>
         <KEYS>
           <KEY NAME="postid" TYPE="foreign" FIELDS="postid" REFTABLE="forum_posts" REFFIELDS="id"/>
         </KEYS>
