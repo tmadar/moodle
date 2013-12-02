@@ -58,8 +58,11 @@ class edit_details_form extends moodleform {
         $mform->setType('description', PARAM_CLEANHTML);
         $mform->addRule('description', null, 'required');
 
-        $str = $action == 'new' ? get_string('badgeimage', 'badges') : get_string('newimage', 'badges');
         $imageoptions = array('maxbytes' => 262144, 'accepted_types' => array('web_image'));
+        $mform->addElement('filepicker', 'lvlimage', 'level Image', null, $imageoptions);
+
+        $str = $action == 'new' ? get_string('badgeimage', 'badges') : get_string('newimage', 'badges');
+       // $imageoptions = array('maxbytes' => 262144, 'accepted_types' => array('web_image'));
         $mform->addElement('filepicker', 'image', $str, null, $imageoptions);
 
         if ($action == 'new') {

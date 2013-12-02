@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 'On');
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -74,6 +75,9 @@ if ($form->is_cancelled()) {
     // Creating new badge here.
     
 if( $data->levelcount > 1 ){
+	//lvlImageMake( '/badges/images/tavo.jpg', '/badges/images/', 5, $data->levelcount );
+			$bgimage = $form->save_temp_file('image');
+		$lvlimage = $form->save_temp_file('lvlimage');
 	for($i = 0; $i < $data->levelcount; $i++){
 	    $fordb->name = $data->name . "-lvl " . $i;
 	    $now = time();
@@ -100,10 +104,39 @@ if( $data->levelcount > 1 ){
 	
 	    $newid = $DB->insert_record('badge', $fordb, true);
 	
+		//$bgimage = $form->save_temp_file('image');
+		//$lvlimage = $form->save_temp_file('lvlimage');
+		
+		//$bgimage = $imgfile;//'/badges/images/tavo.jpg';
+		//$lvlimage = '/badges/images/star.jpg';
+		$margin = 5;
+		$lvls = $data->levelcount;
+		$path_parts = pathinfo($bgimage);
+		$bgimagepath = $path_parts['dirname'];
+		$bgimageext =  $path_parts['extension'];
+		$bgimagefilename = $path_parts['filename'];  
+		  
+		$src = imagecreatefromjpeg($lvlimage);
+		$srcsize = getimagesize($bgimage);
+		$dest = imagecreatefromjpeg($bgimage);
+		$bgsize = getimagesize($bgimage);
+		// Copy
+		//for ($i=0; $i < $lvls; $i++) { 
+			//imagecopy($dest, $src, 100-$srcsize[0]-$margin, 100-$margin, 0, 0, $srcsize[0], $srcsize[1]);
+			imagecopy($dest, $src, $bgsize[0]/2.0, $bgsize[1]/2.0, 0, 0, $srcsize[0], $srcsize[1]);
+			// Output and free from memory
+			header('Content-Type: image/jpeg');
+			$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
+			imagejpeg($dest, $outfile);
+
 	    $newbadge = new badge($newid);
-	    badges_process_badge_image($newbadge, $form->save_temp_file('image'));
+	    badges_process_badge_image($newbadge, $outfile);
 	    // If a user can configure badge criteria, they will be redirected to the criteria page.
+	    	//		}
     }
+    imagedestroy($dest);
+	imagedestroy($src);
+
 }
 else {
 		$now = time();
@@ -139,9 +172,43 @@ else {
     redirect(new moodle_url('/badges/overview.php', array('id' => $newid)));
 }
 }
+
+
+
 echo $OUTPUT->header();
 echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection');
 
 $form->display();
 
 echo $OUTPUT->footer();
+
+
+//================Michaels Add Stars to badge Image to rep levels =======================
+function lvlImageMake($bgimage, $lvlimage, $margin = 5, $lvls ) { 
+// Create image instances
+$path_parts = pathinfo($bgimage);
+$bgimagepath = $path_parts['dirname'];
+$bgimageext =  $path_parts['extension'];
+$bgimagefilename = $path_parts['filename'];  
+  
+$src = imagecreatefromjpeg($lvlimage);
+$srcsize = getimagesize($bgimage);
+$dest = imagecreatefromjpeg($bgimage);
+$bgsize = getimagesize($bgimage);
+// Copy
+for ($i=0; $i < $lvls; $i++) { 
+imagecopy($dest, $src, $bgsize[0]-$srcsize[0]*x-$margin, $bgsize[1]-$margin, 0, 0, $srcsize[0], $srcsize[1]);
+// Output and free from memory
+header('Content-Type: image/jpeg');
+$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
+imagejpeg($dest, $outfile);
+
+}
+
+imagedestroy($dest);
+imagedestroy($src);
+} 
+
+//================Michaels Add Stars to badge Image to rep levels =======================
+
+
