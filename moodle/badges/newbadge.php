@@ -78,7 +78,7 @@ if( $data->levelcount > 1 ){
 	//lvlImageMake( '/badges/images/tavo.jpg', '/badges/images/', 5, $data->levelcount );
 			$bgimage = $form->save_temp_file('image');
 		$lvlimage = $form->save_temp_file('lvlimage');
-	for($i = 0; $i < $data->levelcount; $i++){
+	for($i = 1; $i <= $data->levelcount; $i++){
 	    $fordb->name = $data->name . "-lvl " . $i;
 	    $now = time();
 	
@@ -120,10 +120,14 @@ if( $data->levelcount > 1 ){
 		$srcsize = getimagesize($bgimage);
 		$dest = imagecreatefromjpeg($bgimage);
 		$bgsize = getimagesize($bgimage);
+		imagealphablending($src, true);
+		imagealphablending($dest, true);
+		//imagesavealpha($dest, true);
 		// Copy
 		//for ($i=0; $i < $lvls; $i++) { 
-			//imagecopy($dest, $src, 100-$srcsize[0]-$margin, 100-$margin, 0, 0, $srcsize[0], $srcsize[1]);
-			imagecopy($dest, $src, $bgsize[0]/2.0, $bgsize[1]/2.0, 0, 0, $srcsize[0], $srcsize[1]);
+			//imagecopy($dest, $src, $bgsize[0]-$srcsize[0]*($i+1)-$margin, $bgsize[1]-($margin+$scrsize[1]), 0, 0, $srcsize[0], $srcsize[1]);
+			imagecopy($dest, $src, 100-$i*20, 80, 0, 0, $srcsize[0], $srcsize[1]);
+			//imagecopy($dest, $src, $bgsize[0]/2.0, $bgsize[1]/2.0, 0, 0, $srcsize[0], $srcsize[1]);
 			// Output and free from memory
 			header('Content-Type: image/jpeg');
 			$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
