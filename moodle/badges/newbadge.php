@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 'On');
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -72,39 +73,102 @@ if ($form->is_cancelled()) {
     redirect(new moodle_url('/badges/index.php', array('type' => $type, 'id' => $courseid)));
 } else if ($data = $form->get_data()) {
     // Creating new badge here.
-    $now = time();
+    
+if( $data->levelcount > 1 ){
+	$bgimage = $form->save_temp_file('image');
+	$lvlimage = $form->save_temp_file('lvlimage');
+	
+	for($i = 0; $i < $data->levelcount; $i++){
+	    $fordb->name = $data->name . "-lvl " . $i;
+	    $now = time();
+	
+	    $fordb->description = $data->description;
+	    $fordb->timecreated = $now;
+	    $fordb->timemodified = $now;
+	    $fordb->usercreated = $USER->id;
+	    $fordb->usermodified = $USER->id;
+	    $fordb->image = 0;
+	    $fordb->issuername = $data->issuername;
+	    $fordb->issuerurl = $data->issuerurl;
+	    $fordb->issuercontact = $data->issuercontact;
+	    $fordb->expiredate = ($data->expiry == 1) ? $data->expiredate : null;
+	    $fordb->expireperiod = ($data->expiry == 2) ? $data->expireperiod : null;
+	    $fordb->type = $type;
+	    $fordb->courseid = ($type == BADGE_TYPE_COURSE) ? $courseid : null;
+	    $fordb->messagesubject = get_string('messagesubject', 'badges');
+	    $fordb->message = get_string('messagebody', 'badges',
+	            html_writer::link($CFG->wwwroot . '/badges/mybadges.php', get_string('mybadges', 'badges')));
+	    $fordb->attachment = 1;
+	    $fordb->notification = BADGE_MESSAGE_NEVER;
+	    $fordb->status = BADGE_STATUS_INACTIVE;
+		$fordb->lvl = $data->levelcount;
+		$fordb->xp = $data->xpperlvl;
+	    $newid = $DB->insert_record('badge', $fordb, true);
+	
+		$lvls = $data->levelcount;
+		$path_parts = pathinfo($bgimage);
+		$bgimagepath = $path_parts['dirname'];
+		$bgimageext =  $path_parts['extension'];
+		$bgimagefilename = $path_parts['filename'];  
+		 
+		$bg = imagecreatefromjpeg($bgimage);
+		$src = imagecreatefromjpeg($lvlimage);
+		$srcsize = getimagesize($lvlimage);
+		$imsize = getimagesize($bgimage);
+		 
+		$newImg = imagecreatetruecolor( $imsize[0], $imsize[1] );
+		imagealphablending( $newImg, false);
+		imagesavealpha( $newImg, true);
+		imagecopy( $newImg, $bg, 0,0,0,0,$imsize[0], $imsize[1]);
+		for($x=0;$x<$i;$x++){
+			imagecopy( $newImg, $src, $x*20, 80, 0, 0, 20, 20 );
+		}
+		header('Content-Type: image/jpeg');
+		$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
+		imagejpeg( $newImg, $outfile );
+	    $newbadge = new badge( $newid );
+	    badges_process_badge_image( $newbadge, $outfile );
+    }
+    imagedestroy($newImg);
+	imagedestroy($src);
 
-    $fordb->name = $data->name;
-    $fordb->description = $data->description;
-    $fordb->timecreated = $now;
-    $fordb->timemodified = $now;
-    $fordb->usercreated = $USER->id;
-    $fordb->usermodified = $USER->id;
-    $fordb->image = 0;
-    $fordb->issuername = $data->issuername;
-    $fordb->issuerurl = $data->issuerurl;
-    $fordb->issuercontact = $data->issuercontact;
-    $fordb->expiredate = ($data->expiry == 1) ? $data->expiredate : null;
-    $fordb->expireperiod = ($data->expiry == 2) ? $data->expireperiod : null;
-    $fordb->type = $type;
-    $fordb->courseid = ($type == BADGE_TYPE_COURSE) ? $courseid : null;
-    $fordb->messagesubject = get_string('messagesubject', 'badges');
-    $fordb->message = get_string('messagebody', 'badges',
-            html_writer::link($CFG->wwwroot . '/badges/mybadges.php', get_string('mybadges', 'badges')));
-    $fordb->attachment = 1;
-    $fordb->notification = BADGE_MESSAGE_NEVER;
-    $fordb->status = BADGE_STATUS_INACTIVE;
-
-    $newid = $DB->insert_record('badge', $fordb, true);
-
-    $newbadge = new badge($newid);
-    badges_process_badge_image($newbadge, $form->save_temp_file('image'));
-    // If a user can configure badge criteria, they will be redirected to the criteria page.
+}
+else {
+		$now = time();
+	
+	    $fordb->description = $data->description;
+	    $fordb->timecreated = $now;
+	    $fordb->timemodified = $now;
+	    $fordb->usercreated = $USER->id;
+	    $fordb->usermodified = $USER->id;
+	    $fordb->image = 0;
+	    $fordb->issuername = $data->issuername;
+	    $fordb->issuerurl = $data->issuerurl;
+	    $fordb->issuercontact = $data->issuercontact;
+	    $fordb->expiredate = ($data->expiry == 1) ? $data->expiredate : null;
+	    $fordb->expireperiod = ($data->expiry == 2) ? $data->expireperiod : null;
+	    $fordb->type = $type;
+	    $fordb->courseid = ($type == BADGE_TYPE_COURSE) ? $courseid : null;
+	    $fordb->messagesubject = get_string('messagesubject', 'badges');
+	    $fordb->message = get_string('messagebody', 'badges',
+	            html_writer::link($CFG->wwwroot . '/badges/mybadges.php', get_string('mybadges', 'badges')));
+	    $fordb->attachment = 1;
+	    $fordb->notification = BADGE_MESSAGE_NEVER;
+	    $fordb->status = BADGE_STATUS_INACTIVE;
+	
+	    $newid = $DB->insert_record('badge', $fordb, true);
+	
+	    $newbadge = new badge($newid);
+	    badges_process_badge_image($newbadge, $form->save_temp_file('image'));
+	    // If a user can configure badge criteria, they will be redirected to the criteria page.
     if (has_capability('moodle/badges:configurecriteria', $PAGE->context)) {
         redirect(new moodle_url('/badges/criteria.php', array('id' => $newid)));
     }
     redirect(new moodle_url('/badges/overview.php', array('id' => $newid)));
 }
+}
+
+
 
 echo $OUTPUT->header();
 echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection');
@@ -112,3 +176,34 @@ echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection');
 $form->display();
 
 echo $OUTPUT->footer();
+
+
+//================Michaels Add Stars to badge Image to rep levels =======================
+function lvlImageMake($bgimage, $lvlimage, $margin = 5, $lvls ) { 
+// Create image instances
+$path_parts = pathinfo($bgimage);
+$bgimagepath = $path_parts['dirname'];
+$bgimageext =  $path_parts['extension'];
+$bgimagefilename = $path_parts['filename'];  
+  
+$src = imagecreatefromjpeg($lvlimage);
+$srcsize = getimagesize($bgimage);
+$dest = imagecreatefromjpeg($bgimage);
+$bgsize = getimagesize($bgimage);
+// Copy
+for ($i=0; $i < $lvls; $i++) { 
+imagecopy($dest, $src, $bgsize[0]-$srcsize[0]*x-$margin, $bgsize[1]-$margin, 0, 0, $srcsize[0], $srcsize[1]);
+// Output and free from memory
+header('Content-Type: image/jpeg');
+$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
+imagejpeg($dest, $outfile);
+
+}
+
+imagedestroy($dest);
+imagedestroy($src);
+} 
+
+//================Michaels Add Stars to badge Image to rep levels =======================
+
+

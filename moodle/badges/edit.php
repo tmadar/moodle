@@ -1,4 +1,5 @@
 <?php
+// Changed by MICHAEL!
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -90,7 +91,7 @@ if ($form->is_cancelled()) {
     redirect(new moodle_url('/badges/overview.php', array('id' => $badgeid)));
 } else if ($form->is_submitted() && $form->is_validated() && ($data = $form->get_data())) {
     if ($action == 'details') {
-        $badge->name = $data->name;
+		$badge->name = "debug-1";//$data->name;
         $badge->description = $data->description;
         $badge->usermodified = $USER->id;
         $badge->issuername = $data->issuername;
@@ -127,11 +128,14 @@ if ($form->is_cancelled()) {
 
         unset($badge->messageformat);
         unset($badge->message_editor);
-        if ($badge->save()) {
-            $statusmsg = get_string('changessaved');
-        } else {
-            $errormsg = get_string('error:save', 'badges');
-        }
+		for ($i = 1; $i <= 5; $i++) {
+			$badge->name = "debug-2";//get_string( $data->name , "-lvl" , $i );
+	        if ($badge->save()) {
+	            $statusmsg = get_string('changessaved');
+	        } else {
+	            $errormsg = get_string('error:save', 'badges');
+	        }
+		}
     }
 }
 

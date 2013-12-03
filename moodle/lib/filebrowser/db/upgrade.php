@@ -1813,6 +1813,8 @@ function xmldb_main_upgrade($oldversion) {
         $table->add_field('attachment', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'messagesubject');
         $table->add_field('notification', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'attachment');
         $table->add_field('status', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'notification');
+		$table->add_field('lvl', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'lvl');
+		$table->add_field('xp', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'xp');
         $table->add_field('nextcron', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'status');
 
         // Adding keys to table 'badge'.

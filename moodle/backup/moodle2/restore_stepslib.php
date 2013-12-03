@@ -2046,6 +2046,8 @@ class restore_badges_structure_step extends restore_structure_step {
                 'attachment'     => $data->attachment,
                 'notification'   => $data->notification,
                 'status'         => BADGE_STATUS_INACTIVE,
+                'lvl'			 => $data->lvl,
+                'xp'             => $data->xp,
                 'nextcron'       => $this->apply_date_offset($data->nextcron)
         );
 

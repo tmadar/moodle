@@ -1,4 +1,5 @@
 <?php
+// CHanged by MICHAEL!
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -57,8 +58,11 @@ class edit_details_form extends moodleform {
         $mform->setType('description', PARAM_CLEANHTML);
         $mform->addRule('description', null, 'required');
 
-        $str = $action == 'new' ? get_string('badgeimage', 'badges') : get_string('newimage', 'badges');
         $imageoptions = array('maxbytes' => 262144, 'accepted_types' => array('web_image'));
+        $mform->addElement('filepicker', 'lvlimage', 'level Image', null, $imageoptions);
+
+        $str = $action == 'new' ? get_string('badgeimage', 'badges') : get_string('newimage', 'badges');
+       // $imageoptions = array('maxbytes' => 262144, 'accepted_types' => array('web_image'));
         $mform->addElement('filepicker', 'image', $str, null, $imageoptions);
 
         if ($action == 'new') {
@@ -116,7 +120,6 @@ class edit_details_form extends moodleform {
 	//		$classlist[] = $course->shortname;
 	//		echo "HIIIIIIIII";
 	//	}
-		echo "fucccck";
 
 		//associate with a class
         $mform->addElement('header', 'classassoc', 'Badge for class');
@@ -144,12 +147,12 @@ class edit_details_form extends moodleform {
         $mform->setType('levelcount', PARAM_NOTAGS);
         $mform->addRule('levelcount', null, 'required');
 		$mform->addElement('select', 'xpperlvl', 'XP per level',                                                   
-												  array( '0' => '50',
-                                                         '1' => '100',
-                                                         '2' => '200',
-                                                         '3' => '300',
-                                                         '4' => '400',
-                                                         '5' => '500'));
+												  array( '50' => '50',
+                                                         '100' => '100',
+                                                         '200' => '200',
+                                                         '300' => '300',
+                                                         '400' => '400',
+                                                         '500' => '500'));
 
 //-------------------------MICHAELS FEATURE---------------------------------
 

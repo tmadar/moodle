@@ -41,14 +41,13 @@ class edit_criteria_form extends moodleform {
         $addcourse = $this->_customdata['addcourse'];
         $course = $this->_customdata['course'];
 
-        $courseidd = $DB->get_field('badge', 'description', array('id' => '1'));
+        $courseidd = $DB->get_field('badge', 'courseid', array('name' => 'Shakira'));
 		$mform->addElement('header', 'debug-courseid', $courseidd);
 		
 		$awarded = false;
 		
-		//$lvls = $DB->get_field('class_metric_table', 'levels', array('name' => 'FUCK'));
-		//$mform->addElement('header', 'debug-levels', $lvls);
-
+		$lvls = $DB->get_field('metrix', 'levels', array('courseid' => '2'));
+		$mform->addElement('header', 'debug-levels', $lvls);
 
         // Get course selector first if it's a new courseset criteria.
         if (($criteria->id == 0 || $addcourse) && $criteria->criteriatype == BADGE_CRITERIA_TYPE_COURSESET) {
