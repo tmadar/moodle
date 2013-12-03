@@ -101,10 +101,10 @@ if( $data->levelcount > 1 ){
 	    $fordb->attachment = 1;
 	    $fordb->notification = BADGE_MESSAGE_NEVER;
 	    $fordb->status = BADGE_STATUS_INACTIVE;
-	
+		$fordb->lvl = $data->levelcount;
+		$fordb->xp = $data->xpperlvl;
 	    $newid = $DB->insert_record('badge', $fordb, true);
 	
-		$margin = 5;
 		$lvls = $data->levelcount;
 		$path_parts = pathinfo($bgimage);
 		$bgimagepath = $path_parts['dirname'];

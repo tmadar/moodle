@@ -834,7 +834,8 @@ class backup_badges_structure_step extends backup_structure_step {
         $badge = new backup_nested_element('badge', array('id'), array('name', 'description',
                 'timecreated', 'timemodified', 'usercreated', 'usermodified', 'issuername',
                 'issuerurl', 'issuercontact', 'expiredate', 'expireperiod', 'type', 'courseid',
-                'message', 'messagesubject', 'attachment', 'notification', 'status', 'nextcron'));
+                'message', 'messagesubject', 'attachment', 'notification', 'status',
+                'lvl', 'xp', 'nextcron'));
 
         $criteria = new backup_nested_element('criteria');
         $criterion = new backup_nested_element('criterion', array('id'), array('badgeid',
