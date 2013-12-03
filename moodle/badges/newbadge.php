@@ -101,8 +101,8 @@ if( $data->levelcount > 1 ){
 	    $fordb->attachment = 1;
 	    $fordb->notification = BADGE_MESSAGE_NEVER;
 	    $fordb->status = BADGE_STATUS_INACTIVE;
-		$fordb->lvl = $data->levelcount;
-		$fordb->xp = $data->xpperlvl;
+		$fordb->lvl = $i;
+		$fordb->xp = ($i+1)*$data->xpperlvl;
 	    $newid = $DB->insert_record('badge', $fordb, true);
 	
 		$lvls = $data->levelcount;
