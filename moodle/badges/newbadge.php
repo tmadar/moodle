@@ -75,10 +75,10 @@ if ($form->is_cancelled()) {
     // Creating new badge here.
     
 if( $data->levelcount > 1 ){
-	//lvlImageMake( '/badges/images/tavo.jpg', '/badges/images/', 5, $data->levelcount );
-			$bgimage = $form->save_temp_file('image');
-		$lvlimage = $form->save_temp_file('lvlimage');
-	for($i = 1; $i <= $data->levelcount; $i++){
+	$bgimage = $form->save_temp_file('image');
+	$lvlimage = $form->save_temp_file('lvlimage');
+	
+	for($i = 0; $i < $data->levelcount; $i++){
 	    $fordb->name = $data->name . "-lvl " . $i;
 	    $now = time();
 	
@@ -104,41 +104,32 @@ if( $data->levelcount > 1 ){
 	
 	    $newid = $DB->insert_record('badge', $fordb, true);
 	
-		//$bgimage = $form->save_temp_file('image');
-		//$lvlimage = $form->save_temp_file('lvlimage');
-		
-		//$bgimage = $imgfile;//'/badges/images/tavo.jpg';
-		//$lvlimage = '/badges/images/star.jpg';
 		$margin = 5;
 		$lvls = $data->levelcount;
 		$path_parts = pathinfo($bgimage);
 		$bgimagepath = $path_parts['dirname'];
 		$bgimageext =  $path_parts['extension'];
 		$bgimagefilename = $path_parts['filename'];  
-		  
+		 
+		$bg = imagecreatefromjpeg($bgimage);
 		$src = imagecreatefromjpeg($lvlimage);
-		$srcsize = getimagesize($bgimage);
-		$dest = imagecreatefromjpeg($bgimage);
-		$bgsize = getimagesize($bgimage);
-		imagealphablending($src, true);
-		imagealphablending($dest, true);
-		//imagesavealpha($dest, true);
-		// Copy
-		//for ($i=0; $i < $lvls; $i++) { 
-			//imagecopy($dest, $src, $bgsize[0]-$srcsize[0]*($i+1)-$margin, $bgsize[1]-($margin+$scrsize[1]), 0, 0, $srcsize[0], $srcsize[1]);
-			imagecopy($dest, $src, 100-$i*20, 80, 0, 0, $srcsize[0], $srcsize[1]);
-			//imagecopy($dest, $src, $bgsize[0]/2.0, $bgsize[1]/2.0, 0, 0, $srcsize[0], $srcsize[1]);
-			// Output and free from memory
-			header('Content-Type: image/jpeg');
-			$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
-			imagejpeg($dest, $outfile);
-
-	    $newbadge = new badge($newid);
-	    badges_process_badge_image($newbadge, $outfile);
-	    // If a user can configure badge criteria, they will be redirected to the criteria page.
-	    	//		}
+		$srcsize = getimagesize($lvlimage);
+		$imsize = getimagesize($bgimage);
+		 
+		$newImg = imagecreatetruecolor( $imsize[0], $imsize[1] );
+		imagealphablending( $newImg, false);
+		imagesavealpha( $newImg, true);
+		imagecopy( $newImg, $bg, 0,0,0,0,$imsize[0], $imsize[1]);
+		for($x=0;$x<$i;$x++){
+			imagecopy( $newImg, $src, $x*20, 80, 0, 0, 20, 20 );
+		}
+		header('Content-Type: image/jpeg');
+		$outfile = $bgimagepath . $bgimagefilename . $i . 'jpg'; 
+		imagejpeg( $newImg, $outfile );
+	    $newbadge = new badge( $newid );
+	    badges_process_badge_image( $newbadge, $outfile );
     }
-    imagedestroy($dest);
+    imagedestroy($newImg);
 	imagedestroy($src);
 
 }
