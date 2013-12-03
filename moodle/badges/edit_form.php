@@ -147,12 +147,12 @@ class edit_details_form extends moodleform {
         $mform->setType('levelcount', PARAM_NOTAGS);
         $mform->addRule('levelcount', null, 'required');
 		$mform->addElement('select', 'xpperlvl', 'XP per level',                                                   
-												  array( '0' => '50',
-                                                         '1' => '100',
-                                                         '2' => '200',
-                                                         '3' => '300',
-                                                         '4' => '400',
-                                                         '5' => '500'));
+												  array( '50' => '50',
+                                                         '100' => '100',
+                                                         '200' => '200',
+                                                         '300' => '300',
+                                                         '400' => '400',
+                                                         '500' => '500'));
 
 //-------------------------MICHAELS FEATURE---------------------------------
 

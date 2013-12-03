@@ -171,6 +171,9 @@
 	      <FIELD NAME="param3" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT=""/>
 	      <FIELD NAME="metric" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT=""/>
         </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
     </TABLE>
     <TABLE NAME="class_student_xp_table" COMMENT="this is the table that holds the students xp records">
     	<FIELDS>
