@@ -215,6 +215,7 @@ $string['invalidparentpostid'] = 'Parent post ID was incorrect';
 $string['invalidpostid'] = 'Invalid post ID - {$a}';
 $string['lastpost'] = 'Last post';
 $string['learningforums'] = 'Learning forums';
+$string['like'] = 'Like';
 $string['longpost'] = 'Long post';
 $string['mailnow'] = 'Mail now';
 $string['manydiscussions'] = 'Discussions per page';
@@ -419,6 +420,7 @@ $string['trackingtype_help'] = 'If enabled, participants can track read and unre
 * Off - Read and unread posts are not tracked
 
 Note: Forum tracking must also be enabled in the user\'s profile settings.';
+$string['unlike'] = 'Unlike';
 $string['unread'] = 'Unread';
 $string['unreadposts'] = 'Unread posts';
 $string['unreadpostsnumber'] = '{$a} unread posts';

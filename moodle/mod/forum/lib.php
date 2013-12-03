@@ -3195,7 +3195,7 @@ function forum_make_mail_post($course, $cm, $forum, $discussion, $post, $userfro
  */
 function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=false, $reply=false, $link=false,
                           $footer="", $highlight="", $postisread=null, $dummyifcantsee=true, $istracked=null, $return=false) {
-    global $USER, $CFG, $OUTPUT;
+    global $USER, $CFG, $OUTPUT, $DB;
 
     require_once($CFG->libdir . '/filelib.php');
 
@@ -3288,6 +3288,8 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
         $str->displaymode     = get_user_preferences('forum_displaymode', $CFG->forum_displaymode);
         $str->markread     = get_string('markread', 'forum');
         $str->markunread   = get_string('markunread', 'forum');
+		$str->like		   = get_string('like', 'forum');
+		$str->unlike	   = get_string('unlike', 'forum');
     }
 
     $discussionlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
@@ -3304,6 +3306,10 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $postuser->fullname    = fullname($postuser, $cm->cache->caps['moodle/site:viewfullnames']);
     $postuser->profilelink = new moodle_url('/user/view.php', array('id'=>$post->userid, 'course'=>$course->id));
 
+	// Get the post metric data
+	//$newmetrics = new stdClass();
+	//$newmetrics = $DB->get_record('metrics_posts', array('postid' => $post->id));
+	
     // Prepare the groups the posting user belongs to
     if (isset($cm->cache->usersgroups)) {
         $groups = array();
@@ -3352,6 +3358,17 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
             $url->set_anchor('p'.$post->parent);
         }
         $commands[] = array('url'=>$url, 'text'=>$str->parent);
+		
+		//if($newmetrics) {
+			// Update post metrics with number of direct child comments
+			//echo $newmetrics->param2;
+			//$newmetrics->param2 = count( $post->children);
+			
+			//Always update post value
+			//$newmetrics->param2 = 3.0;//0.4 * ($newmetrics->param2 ) + 0.6 * ($newmetrics->param1);
+			//echo $newmetrics->param2;
+			//$DB->update_record('metrics_posts', $newmetrics);
+		//}
     }
 
     // Hack for allow to edit news posts those are not displayed yet until they are displayed
@@ -3383,8 +3400,19 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
         $commands[] = array('url'=>new moodle_url('/mod/forum/post.php#mformforum', array('reply'=>$post->id)), 'text'=>$str->reply);
     }
 
-	if (true) {
-		$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>"Like");	
+	if ($post) {
+		$newmetrics = new stdClass();
+		if($newmetrics = $DB->get_record('metrics_posts', array('postid' => $post->id))) {
+			if($newmetrics->param1 == 1.0) {
+				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->unlike);
+			}
+			else {
+				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->like);
+			}
+		}
+		else{
+			$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->like);
+		}
 	}
 	
     if ($CFG->enableportfolios && ($cm->cache->caps['mod/forum:exportpost'] || ($ownpost && $cm->cache->caps['mod/forum:exportownpost']))) {
@@ -3451,7 +3479,14 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); //topic
     $output .= html_writer::end_tag('div'); //row
 
-    $output .= html_writer::start_tag('div', array('class'=>'row maincontent clearfix'));
+	//********************NOT PRETTY!********************
+	if($newmetrics->param1 == 1.0) {
+		$output .= html_writer::start_tag('div', array('class'=>'row maincontent clearfix', 'style'=>'background-color:NavajoWhite '));
+	}
+	else
+	{
+		$output .= html_writer::start_tag('div', array('class'=>'row maincontent clearfix'));
+	}
     $output .= html_writer::start_tag('div', array('class'=>'left'));
 
     $groupoutput = '';
@@ -3466,6 +3501,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); //left side
     $output .= html_writer::start_tag('div', array('class'=>'no-overflow'));
     $output .= html_writer::start_tag('div', array('class'=>'content'));
+
     if (!empty($attachments)) {
         $output .= html_writer::tag('div', $attachments, array('class'=>'attachments'));
     }
@@ -3502,7 +3538,14 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); // Content mask
     $output .= html_writer::end_tag('div'); // Row
 
-    $output .= html_writer::start_tag('div', array('class'=>'row side'));
+	//********************NOT PRETTY!********************
+	if($newmetrics->param1 == 1.0) {
+		$output .= html_writer::start_tag('div', array('class'=>'row side', 'style'=>'background-color:NavajoWhite '));
+	}
+	else
+	{
+		$output .= html_writer::start_tag('div', array('class'=>'row side'));
+	}
     $output .= html_writer::tag('div','&nbsp;', array('class'=>'left'));
     $output .= html_writer::start_tag('div', array('class'=>'options clearfix'));
 
