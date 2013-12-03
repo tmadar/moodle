@@ -33,7 +33,6 @@
 		$DB->update_record('metrics_posts', $newmetrics);
 		$newmetrics->metric     = 0.4 * ($newmetrics->param2 ) + 0.6 * ($newmetrics->param1);
 		echo $newmetrics->metric;
-		echo $DB->update_record('metrics_posts', $newmetrics);
 	}
 	
 	header('Refresh: 1; URL=http://localhost/moodle/mod/forum/discuss.php?d=1');
