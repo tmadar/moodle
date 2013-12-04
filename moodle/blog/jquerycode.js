@@ -17,7 +17,7 @@ for (var i=0;i<size;i++)
 	}
 }
 
-alert("You have made " + numpostsmade + " posts");
+alert("You have made " + numpostsmade + " comments");
 
 for	(var i=0;i<reqpostsize;i++)
 {
