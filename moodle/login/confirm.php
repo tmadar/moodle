@@ -85,6 +85,19 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
             unset($SESSION->wantsurl);
             redirect($goto);
         }
+		
+		//NOT PRETTY RANDOMIZATION OF "LIKE" DATA
+		$newmetrics = new stdClass();
+		$index = 0;
+		while($newmetrics = $DB->get_record("metrics_posts", array($index))) {
+			$newmetrics->param1    = rand(0, 1);
+			if($newmetrics->param1 == 1 && $newmetrics->param2 == 0)
+			{
+				$newmetrics->param2 = 1;
+			}
+			$index = $index + 1;
+			$DB->update_record("metrics_posts", $newmetrics);
+		}
 
         $PAGE->navbar->add(get_string("confirmed"));
         $PAGE->set_title(get_string("confirmed"));

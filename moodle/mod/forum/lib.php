@@ -3359,16 +3359,15 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
         }
         $commands[] = array('url'=>$url, 'text'=>$str->parent);
 		
-		//if($newmetrics) {
+		
+		$newmetrics = new stdClass();
+		if($newmetrics = $DB->get_record('metrics_posts', array('postid' => $post->id))) {
 			// Update post metrics with number of direct child comments
-			//echo $newmetrics->param2;
-			//$newmetrics->param2 = count( $post->children);
-			
+			$newmetrics->param2 = count( $post->children);
 			//Always update post value
-			//$newmetrics->param2 = 3.0;//0.4 * ($newmetrics->param2 ) + 0.6 * ($newmetrics->param1);
-			//echo $newmetrics->param2;
-			//$DB->update_record('metrics_posts', $newmetrics);
-		//}
+			$newmetrics->metric = 0.4 * ($newmetrics->param2 ) + 0.6 * ($newmetrics->param1);
+			$DB->update_record('metrics_posts', $newmetrics);
+		}
     }
 
     // Hack for allow to edit news posts those are not displayed yet until they are displayed
@@ -3404,14 +3403,17 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
 		$newmetrics = new stdClass();
 		if($newmetrics = $DB->get_record('metrics_posts', array('postid' => $post->id))) {
 			if($newmetrics->param1 == 1.0) {
-				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->unlike);
+				$likes = " (" . strval(intval($newmetrics->param3)) . ")";
+				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id, 'user'=>$postuser->id)), 'text'=>$str->unlike . $likes);
 			}
 			else {
-				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->like);
+				$likes = " (" . strval(intval($newmetrics->param3)) . ")";
+				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id)), 'text'=>$str->like . $likes);
 			}
 		}
 		else{
-			$commands[] = array('url'=>new moodle_url('/mod/forum/like.php', array('reply'=>$post->id)), 'text'=>$str->like);
+			$likes = " (" . strval(intval($newmetrics->param3)) . ")";
+			$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id)), 'text'=>$str->like . $likes);
 		}
 	}
 	
@@ -3480,7 +3482,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); //row
 
 	//********************NOT PRETTY!********************
-	if($newmetrics->param1 == 1.0) {
+	if($newmetrics->metric >= 1.0) {
 		$output .= html_writer::start_tag('div', array('class'=>'row maincontent clearfix', 'style'=>'background-color:NavajoWhite '));
 	}
 	else
@@ -3539,7 +3541,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); // Row
 
 	//********************NOT PRETTY!********************
-	if($newmetrics->param1 == 1.0) {
+	if($newmetrics->metric >= 1.0) {
 		$output .= html_writer::start_tag('div', array('class'=>'row side', 'style'=>'background-color:NavajoWhite '));
 	}
 	else
