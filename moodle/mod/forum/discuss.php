@@ -35,13 +35,7 @@
 
     $url = new moodle_url('/mod/forum/discuss.php', array('d'=>$d));
 	
-	//COUNTING USER POSTS
-	$newpost = new stdClass();
-	$index = 0;
-	$postcount = 0;
-	$postcount = $DB->count_records('forum_posts', array('userid' => $USER->id));
-	echo '<input type="hidden" name=\'countr\' value=' . $postcount . '></input>';
-	
+
     if ($parent !== 0) {
         $url->param('parent', $parent);
     }
@@ -269,6 +263,12 @@
 
     $canrate = has_capability('mod/forum:rate', $modcontext);
     forum_print_discussion($course, $cm, $forum, $discussion, $post, $displaymode, $canreply, $canrate);
+
+	//COUNTING USER POSTS
+	$postcount = 0;
+	$postcount += $DB->count_records('forum_posts', array('userid' => $USER->id));
+	echo '<input type="hidden" name=\'countr\' value=' . $postcount . '></input>';
+	
 
     echo $OUTPUT->footer();
 
