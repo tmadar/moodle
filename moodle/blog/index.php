@@ -189,6 +189,7 @@ if (!empty($userid)) {
 
         $PAGE->navigation->extend_for_user($user);
     }
+
 }
 
 $courseid = (empty($courseid)) ? SITEID : $courseid;
@@ -222,8 +223,19 @@ echo $OUTPUT->heading($blogheaders['heading'], 2);
 $bloglisting = new blog_listing($blogheaders['filters']);
 $bloglisting->print_entries();
 
+if ($USER->id) {
+	if (!$studentxp = $DB->get_record('class_student_xp_table', array('userid'=>$USER->id))) {
+        print_error('invalidcourseid');
+    }
+	echo '<input type="hidden" name=\'datar\' value=' . json_encode($studentxp) . '></input>';
+	
+}
+//echo '<script type="text/javascript"> alert( \'' . $USER->id . '\'); </script>';
+echo '<div id="chartcontainer">This is just a replacement in case Javascript is not available or used for SEO purposes</div>';
+echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>';
+echo '<script type="text/javascript" src="jscharts.js"></script>';
+echo '<script type="text/javascript" src="chart.js"></script>';
+echo '<script type="text/javascript" src="jquerycode.js"></script>';
 echo $OUTPUT->footer();
 
 add_to_log($courseid, 'blog', 'view', 'index.php?entryid='.$entryid.'&amp;tagid='.@$tagid.'&amp;tag='.$tag, 'view blog entry');
-echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>';
-echo '<script type="text/javascript" src="jquerycode.js"></script>';
