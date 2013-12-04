@@ -239,6 +239,20 @@
             break;
     }
 
+if ($USER->id) {
+	if (!$studentxp = $DB->get_record('class_student_xp_table', array('userid'=>$USER->id))) {
+        print_error('invalidcourseid');
+    }
+	echo '<input type="hidden" name=\'datar\' value=' . json_encode($studentxp) . '></input>';
+	
+}
+//echo '<script type="text/javascript"> alert( \'' . $USER->id . '\'); </script>';
+echo '<div id="chartcontainer">This is just a replacement in case Javascript is not available or used for SEO purposes</div>';
+echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>';
+echo '<script type="text/javascript" src="jscharts.js"></script>';
+echo '<script type="text/javascript" src="chart.js"></script>';
+
+
     echo $OUTPUT->footer($course);
 
 
