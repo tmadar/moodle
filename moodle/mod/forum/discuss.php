@@ -269,7 +269,9 @@
 	$postcount += $DB->count_records('forum_posts', array('userid' => $USER->id));
 	echo '<input type="hidden" name=\'countr\' value=' . $postcount . '></input>';
 	
-
+	echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>';
+	echo '<script type="text/javascript" src="jquerycode2.js"></script>';
+	
     echo $OUTPUT->footer();
 
 
