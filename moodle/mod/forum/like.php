@@ -68,5 +68,5 @@
 		echo $newmetrics->param2;
 	}
 	
-	header('Refresh: 1; URL=http://localhost/moodle/mod/forum/discuss.php?d=1');
+	//header('Refresh: 1; URL=../discuss.php');
 ?>
