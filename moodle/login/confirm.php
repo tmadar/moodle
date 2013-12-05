@@ -91,9 +91,9 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
 		$index = 0;
 		while($newmetrics = $DB->get_record("metrics_posts", array($index))) {
 			$newmetrics->param1    = rand(0, 1);
-			if($newmetrics->param1 == 1 && $newmetrics->param2 == 0)
+			if($newmetrics->param1 == 1 && $newmetrics->param3 == 0)
 			{
-				$newmetrics->param2 = 1;
+				$newmetrics->param3 = 1;
 			}
 			$index = $index + 1;
 			$DB->update_record("metrics_posts", $newmetrics);
