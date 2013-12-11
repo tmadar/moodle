@@ -18,7 +18,8 @@
 		$newmetrics->param2    = 0.0;
 		$newmetrics->param3    = 0.0;
 		//always update post value
-		$newmetrics->metric     = 0.5 * ($newmetrics->param2 ) + 0.5 * ($newmetrics->param1) + 0.5 * (time() - $post->created);
+		$newmetrics->metric     = 0;
+		//$newmetrics->metric     = 0.5 * ($newmetrics->param2 ) + 0.5 * ($newmetrics->param1) + 0.5 * (time() - $post->created);
 		$newmetrics = $DB->insert_record("metrics_posts", $newmetrics);
 		
 		//update XP
