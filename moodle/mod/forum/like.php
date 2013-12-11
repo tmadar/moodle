@@ -65,6 +65,7 @@
 		//always update post value
 		$DB->update_record('metrics_posts', $newmetrics);
 		$newmetrics->metric     = 0.5 * ($newmetrics->param2 ) + 0.5 * ($newmetrics->param1) + 0.5 * (time() - $post->created);
-		echo $newmetrics->param2;
 	}
+	
+	header('Location: ' . $_SERVER['HTTP_REFERER']);
 ?>
