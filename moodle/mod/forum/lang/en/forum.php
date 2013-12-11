@@ -420,7 +420,7 @@ $string['trackingtype_help'] = 'If enabled, participants can track read and unre
 * Off - Read and unread posts are not tracked
 
 Note: Forum tracking must also be enabled in the user\'s profile settings.';
-$string['unlike'] = 'Unlike';
+$string['unlike'] = 'You like this! Unlike';
 $string['unread'] = 'Unread';
 $string['unreadposts'] = 'Unread posts';
 $string['unreadpostsnumber'] = '{$a} unread posts';

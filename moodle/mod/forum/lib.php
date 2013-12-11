@@ -3365,7 +3365,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
 			// Update post metrics with number of direct child comments
 			$newmetrics->param2 = count( $post->children);
 			//Always update post value
-			$newmetrics->metric = 0.4 * ($newmetrics->param2 ) + 0.6 * ($newmetrics->param1);
+			$newmetrics->metric =  0.5 * ($newmetrics->param2 ) + 0.5 * ($newmetrics->param3) + 1 * ( ($post->created - 1384131722) / (time() - 1384131722) );
 			$DB->update_record('metrics_posts', $newmetrics);
 		}
     }
@@ -3403,16 +3403,16 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
 		$newmetrics = new stdClass();
 		if($newmetrics = $DB->get_record('metrics_posts', array('postid' => $post->id))) {
 			if($newmetrics->param1 == 1.0) {
-				$likes = " (" . strval(intval($newmetrics->param3)) . ")";
-				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id, 'user'=>$postuser->id)), 'text'=>$str->unlike . $likes);
+				$likes = " " . strval(intval($newmetrics->param3) -1) . " ";
+				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id, 'user'=>$postuser->id)), 'text'=>"Unlike (You and " . $likes . " other(s) like this)");//$str->unlike . $likes);
 			}
 			else {
-				$likes = " (" . strval(intval($newmetrics->param3)) . ")";
+				$likes = " (" . strval(intval($newmetrics->param3)) . " other(s) like this)";
 				$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id)), 'text'=>$str->like . $likes);
 			}
 		}
 		else{
-			$likes = " (" . strval(intval($newmetrics->param3)) . ")";
+			$likes = " (" . strval(intval($newmetrics->param3)) . " other(s) like this)";
 			$commands[] = array('url'=>new moodle_url('/mod/forum/like.php',array('reply'=>$post->id)), 'text'=>$str->like . $likes);
 		}
 	}
@@ -3482,7 +3482,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); //row
 
 	//********************NOT PRETTY!********************
-	if($newmetrics->metric >= 1.0) {
+	if($newmetrics->metric >= 3.0) {
 		$output .= html_writer::start_tag('div', array('class'=>'row maincontent clearfix', 'style'=>'background-color:NavajoWhite '));
 	}
 	else
@@ -3541,7 +3541,7 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     $output .= html_writer::end_tag('div'); // Row
 
 	//********************NOT PRETTY!********************
-	if($newmetrics->metric >= 1.0) {
+	if($newmetrics->metric >= 3.0) {
 		$output .= html_writer::start_tag('div', array('class'=>'row side', 'style'=>'background-color:NavajoWhite '));
 	}
 	else
