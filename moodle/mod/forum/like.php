@@ -67,6 +67,4 @@
 		$newmetrics->metric     = 0.5 * ($newmetrics->param2 ) + 0.5 * ($newmetrics->param1) + 0.5 * (time() - $post->created);
 		echo $newmetrics->param2;
 	}
-	
-	//header('Refresh: 1; URL=http://localhost/moodle/mod/forum/discuss.php?d=1');
 ?>
